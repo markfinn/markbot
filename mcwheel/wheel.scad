@@ -1,38 +1,58 @@
 /* Mark's Mecanum wheel
 */
 
+//number of rollers on the wheel
+rollers=6;
+
+//These are the bearings that support the rollers
 bearing_od=16;
 bearing_id=5;
 bearing_t=5;
 
+//effective radius and roller radius
 overall_contact_r=100;
 rotor_r=28;
-r_r=overall_contact_r-rotor_r;
-mid=20;
-floorclearance_t=8;
-rotorclearance_t=2;
 
+//some rotor definition number
+rotor_l =140; //full length of a roller
+rotor_mid_l=35; //length of the middle segment of a roller
+floorclearance_t=8; //distance from the floor to a bearing bracket -- smaller means thicker/sturdier brackets but less clearance
+rotorclearance_t=1.5; //distance between rollers and brackets. -- smaller means thicker/sturdier brackets but less clearance
+
+//bracket thickness and width
 outer_r=rotor_r-floorclearance_t;
-brac_w =outer_r*2+5;
-brac_t =8;
+brac_w = outer_r*2+5;
+brac_t = 8;
 
-faces=6;
+//hub fill in radius and thickness
 hub_r=55;
-hub_t=pow(pow(brac_w,2)+pow(brac_t*2+mid+2*rotorclearance_t, 2), .5);
+hub_t=pow(pow(brac_w,2)+pow(brac_t*2+rotor_mid_l+2*rotorclearance_t, 2), .5);
 
+//bearing catch flange demensions
 lip_h = 1.5;
 lip_w = brac_t - bearing_t;
 
-rotor_l =140;
-
+//holes in end of rotors for bolts
 countersink_r=9;
 countersink_d=10;
 
+//planned rubber tread features
 rubber_t=2;
 rubber_grooves=5;
 rubber_groove_d=2;
 
+//viewing alpha
 transparency=.85;
+
+//calculate the radius of the rotor axles
+r_r=overall_contact_r-rotor_r;
+
+
+
+
+
+
+
 
 module bracket()
 {
@@ -41,18 +61,18 @@ module bracket()
 		hull()
 		{
 			translate([r_r/2, 0, 0])
-				cube([r_r, brac_w, brac_t*2+mid+2*rotorclearance_t], center=true); //bracket
+				cube([r_r, brac_w, brac_t*2+rotor_mid_l+2*rotorclearance_t], center=true); //bracket
 			translate([r_r, 0, 0])
-				cylinder(r=outer_r, h=brac_t*2+mid+2*rotorclearance_t, $fn=40, center=true); //bracket top
+				cylinder(r=outer_r, h=brac_t*2+rotor_mid_l+2*rotorclearance_t, $fn=40, center=true); //bracket top
 		}
 		translate([r_r, 0, 0])
-			cylinder(r=bearing_od/2-lip_h, h=brac_t*2+mid+2+2*rotorclearance_t, $fn=40, center=true); //bearing hole lip
-		translate([r_r, 0, -(brac_t+mid/2+rotorclearance_t+lip_w)])
+			cylinder(r=bearing_od/2-lip_h, h=brac_t*2+rotor_mid_l+2+2*rotorclearance_t, $fn=40, center=true); //bearing hole lip
+		translate([r_r, 0, -(brac_t+rotor_mid_l/2+rotorclearance_t+lip_w)])
 			cylinder(r=bearing_od/2, h=brac_t, $fn=40); // bearing hole
-		translate([r_r, 0, mid/2+rotorclearance_t+lip_w])
+		translate([r_r, 0, rotor_mid_l/2+rotorclearance_t+lip_w])
 			cylinder(r=bearing_od/2, h=brac_t, $fn=40); // bearing hole
 
-//now handled in hub		translate([r_r, 0, 0]) cylinder(r=rotor_r+rotorclearance_t, h=mid+2*rotorclearance_t, $fn=40, center=true); //wheel well
+//now handled in hub		translate([r_r, 0, 0]) cylinder(r=rotor_r+rotorclearance_t, h=rotor_mid_l+2*rotorclearance_t, $fn=40, center=true); //wheel well
 	}
 }
 
@@ -98,9 +118,9 @@ color(c, transparency)
 				}
 				cylinder(r=rotor_r+1+overradius, rotor_l, center=true);
 			}
-			translate([0, 0, mid/2+(brac_t+2*rotorclearance_t)/2])
+			translate([0, 0, rotor_mid_l/2+(brac_t+2*rotorclearance_t)/2])
 				cube([rotor_r*2, rotor_r*2,brac_t+2*rotorclearance_t], center=true);
-			translate([0, 0, -mid/2-(brac_t+2*rotorclearance_t)/2])
+			translate([0, 0, -rotor_mid_l/2-(brac_t+2*rotorclearance_t)/2])
 				cube([rotor_r*2, rotor_r*2,brac_t+2*rotorclearance_t], center=true);
 		}
 		cylinder(r=bearing_id, h=rotor_l+1, center=true);
@@ -177,58 +197,58 @@ module wheel(wheels=1, hardware=1, c="CornflowerBlue")
 			{
 				union()
 				{
-					for (edge = [0 : faces])
+					for (edge = [0 : rollers])
 					{
-						rotate(a=edge * 360/faces, v=[0, 0, 1])
+						rotate(a=edge * 360/rollers, v=[0, 0, 1])
 							rotate(a=45, v=[1, 0, 0])
 								bracket();
 					}
 					cylinder(r=hub_r, h=hub_t, center=true);
 				}
 
-				for (edge = [0 : faces])
+				for (edge = [0 : rollers])
 				{
-					rotate(a=edge * 360/faces, v=[0, 0, 1])
+					rotate(a=edge * 360/rollers, v=[0, 0, 1])
 						rotate(a=45, v=[1, 0, 0])
 							translate([r_r,0,0]) 
 								difference()
 								{
 									cylinder(r=rotor_r+rotorclearance_t, h=rotor_l, center=true);
-									translate([0, 0, mid/2+rotorclearance_t+brac_t/2])
+									translate([0, 0, rotor_mid_l/2+rotorclearance_t+brac_t/2])
 										cube([rotor_r*2, rotor_r*2,brac_t], center=true);
-									translate([0, 0, -mid/2-rotorclearance_t-brac_t/2])
+									translate([0, 0, -rotor_mid_l/2-rotorclearance_t-brac_t/2])
 										cube([rotor_r*2, rotor_r*2,brac_t], center=true);
 								}
 				}
 			}
 		if(hardware)
-			for (edge = [0 : faces])
+			for (edge = [0 : rollers])
 			{
-				rotate(a=edge * 360/faces, v=[0, 0, 1])
+				rotate(a=edge * 360/rollers, v=[0, 0, 1])
 					rotate(a=45, v=[1, 0, 0])
 						union()
 						{
-							translate([r_r,0,bearing_t/2+mid/2+rotorclearance_t+lip_w])
+							translate([r_r,0,bearing_t/2+rotor_mid_l/2+rotorclearance_t+lip_w])
 								bearing();
-							translate([r_r,0,-(bearing_t/2+mid/2+rotorclearance_t+lip_w)])
+							translate([r_r,0,-(bearing_t/2+rotor_mid_l/2+rotorclearance_t+lip_w)])
 								bearing();
 							translate([r_r,0,0])
 								boltnut(l=rotor_l-2*countersink_d, w=bearing_id);
-							translate([r_r,0,lip_w+mid/2+rotorclearance_t-(lip_w+rotorclearance_t)/2])
+							translate([r_r,0,lip_w+rotor_mid_l/2+rotorclearance_t-(lip_w+rotorclearance_t)/2])
 								washer(bearing_id+.1, bearing_id+4, t=lip_w+rotorclearance_t);
-							translate([r_r,0,-(lip_w+mid/2+rotorclearance_t-(lip_w+rotorclearance_t)/2)])
+							translate([r_r,0,-(lip_w+rotor_mid_l/2+rotorclearance_t-(lip_w+rotorclearance_t)/2)])
 								washer(bearing_id+.1, bearing_id+4, t=lip_w+rotorclearance_t);
-							translate([r_r,0,brac_t+mid/2+rotorclearance_t+rotorclearance_t/2])
+							translate([r_r,0,brac_t+rotor_mid_l/2+rotorclearance_t+rotorclearance_t/2])
 								washer(bearing_id+.1, bearing_id+4, t=rotorclearance_t);
-							translate([r_r,0,-(brac_t+mid/2+rotorclearance_t+rotorclearance_t/2)])
+							translate([r_r,0,-(brac_t+rotor_mid_l/2+rotorclearance_t+rotorclearance_t/2)])
 								washer(bearing_id+.1, bearing_id+4, t=rotorclearance_t);
 						}
 			}
 
 		if(wheels)
-			for (edge = [0 : faces])
+			for (edge = [0 : rollers])
 			{
-				rotate(a=edge * 360/faces, v=[0, 0, 1])
+				rotate(a=edge * 360/rollers, v=[0, 0, 1])
 					rotate(a=45, v=[1, 0, 0])
 						union()
 						{
@@ -265,7 +285,5 @@ display();
 //display4();
 
 //rotate(a=$t*360/4, v=[0,0,1]) display();
-
-//intersection(){rotate(a=40, v=[0,0,1]) display();translate([250,0,0]) cube([500,500,500], center=true);}
 
 
