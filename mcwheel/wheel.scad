@@ -41,8 +41,8 @@ countersink_d=7;
 
 //planned rubber tread features
 rubber_t=2;
-rubber_grooves=5;
-rubber_groove_d=2;
+rubber_grooves=3;
+rubber_groove_d=1;
 
 //viewing alpha
 transparency=.85;
@@ -155,7 +155,7 @@ function rp_l(lp) = lp + rp_ll(lp);
 
 function rp_rad_adj(o, g, cs, l, w) = o - (( ((l/cs+.5)%1) >w)?g:0);
 
-module rollerprofile(overradius=0, grooves=0, groove_d=0, step=40)
+module rollerprofile(overradius=0, grooves=0, groove_d=0, step=50)
 {
 	l=rotor_l;
 	chunksize = (l/2)/(grooves+1);
@@ -184,9 +184,9 @@ color(c, transparency)
 			{
 				union()
 				{
-					rotate_extrude($fn=40) rollerprofile(overradius=overradius, grooves=grooves, groove_d=groove_d);
+					rotate_extrude(convexity=grooves+3, $fn=40) rollerprofile(overradius=overradius, grooves=grooves, groove_d=groove_d);
 					rotate(a=180, v=[0,1,0])
-						rotate_extrude($fn=40) rollerprofile(overradius=overradius, grooves=grooves, groove_d=groove_d);
+						rotate_extrude(convexity=grooves+3, $fn=40) rollerprofile(overradius=overradius, grooves=grooves, groove_d=groove_d);
 				}
 				cylinder(r=rotor_r+1+overradius, rotor_l, center=true);
 			}
@@ -349,7 +349,8 @@ module print()
 	//mirror()
 	wheel(wheels=0, hardware=0);
 	translate([overall_contact_r+rotor_r+10,0,0])
-	roller(overradius=-rubber_t, grooves=rubber_grooves, groove_d=rubber_groove_d);
+//	roller(overradius=-rubber_t, grooves=rubber_grooves, groove_d=rubber_groove_d); for a roller covered in rubber
+	roller();
 }
 
 //print();
