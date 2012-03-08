@@ -354,5 +354,9 @@ display();
 //display4();
 
 //rotate(a=$t*360/4, v=[0,0,1]) display();
-
-
+/*
+include <../GoblinOne.scad>
+translate([0,overall_contact_r+rotor_r+10,0])
+scale([.05,.06,.05])
+GoblinOne("MWr1L MF12", steps = 2, center = false, extra = 10, height = 40);
+*/
