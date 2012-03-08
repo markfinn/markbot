@@ -80,34 +80,37 @@ module bracket()
                 ..             ..
                .                 .
               .                   .
-              .         x         .  The wheel has an overall ground contact radius of wr, and the rotor axles are on a radius from the hub of ar.  
-         <-fwd.         |\        .  The rotor is rotated off of hub-axial by ra degrees.  In this diagram, wr includes rp.
+              .         x         .   The wheel has an overall ground contact radius of wr, and the rotor axles are on a radius from the hub of ar.  
+         <-fwd.         |\        .   The rotor is rotated off of hub-axial by ra degrees.  In this diagram, wr includes rp.
   +y           .        |a\ar    .
-   |            ..      |  \  /..    When the wheel has rotated forward by alpha degrees, the rotor axle point above the floor is lp from the center of the rotor axle.
-   |              ....wr|  .\/.      Given a combination of wr, a, ar and lp, we can find rp.  we arange this so that a is calculated from the others given that we know 
-   |    +x            ..|.. /        contact with the floor is at a normal... in other words, the x component of rp is zero.  This leaves rp as a function of (wr, ar, and lp).
-   *-----               |  /         The first two are constants, leaving rp in terms of lp.
+   |            ..      |  \  /..     When the wheel has rotated forward by alpha degrees, the rotor axle point above the floor is lp from the center of the rotor axle.
+   |              ....wr|  .\/.       Given a combination of wr, a, ar and lp, we can find rp.  we arange this so that a is calculated from the others given that we know 
+   |    +x            ..|.. /         contact with the floor is at a normal... in other words, the x component of rp is zero.  This leaves rp as a function of (wr, ar, and lp).
+   *-----               |  / <-axle   The first two are constants, leaving rp in terms of lp.
   /                     | / lp
  /                      |/
-+z                   rp{|
++z                      x
+                     rp{|
+                    ----x----
+                     ground
 
-
-		blow up around rp:
-        |    /              Next we deal with the fact that the rotor contact is not at lp, but below it at an angle.
-        |   /               we know lp and rp in vector form, so it is easy to get ll and r.  This gives us a way to find
-        |  /lp              l (ll+lp) and r for the whole surface of the rotor as a parametric function on the variable lp,
-        | /                 which is somewhat useless on its own.  We simply sweep lp over a large enough range to gaurantee that 
-        |/                  the rotor length is bigger than we need, then truncate the ends with an intersection.
-        x<-P
-       /|
-    ll/^|  
-     / b|
-    /   |
-    \   |rp
-     \  |
-     r\ |
-       \|
-        x<- ground contact
+ 		blow up around rp:
+    .    |    /            .    Next we deal with the fact that the rotor contact is not at lp, but below it at an angle.
+   .     |   /            .     we know lp and rp in vector form, so it is easy to get ll and r.  This gives us a way to find
+  .      |  /<-axle      .      l (ll+lp) and r for the whole surface of the rotor as a parametric function on the variable lp,
+ .       | /           .        which is somewhat useless on its own.  We simply sweep lp over a large enough range to gaurantee that 
+ .       |/           .         the rotor length is bigger than we need, then truncate the ends with an intersection.
+.        x<-P        .
+        /|          . <- outer
+     ll/^|        .     edge of
+      / b|       .      roller
+     /   |      .
+     \90 |rp  .
+      \  |   .
+      r\ | .
+        \|.
+    -----x------
+      ground
 
 
 
