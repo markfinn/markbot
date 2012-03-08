@@ -244,11 +244,11 @@ module boltnut(l=30, w=3, c="MediumSeaGreen")
 		union()
 		{
 			translate([0,0,-(l/2+ht/2+wt)])
-				cylinder(r=w/2, h=l+ht/2+ht*1.1+2*wt, $fn=40);
+				cylinder(r=w/2, h=l+ht/2+ht*1.1+2*wt, $fn=40); //bolt
 			translate([0,0,l/2+ht/2+wt])
-				hexdisk(r=hr, height=ht);
+				hexdisk(r=hr, height=ht);			//nut
 			translate([0,0,-(l/2+ht/2+wt)])
-				hexdisk(r=hr);
+				hexdisk(r=hr, height=ht);			//cap
 			translate([0,0,(l/2+wt/2+wt)])
 				washer(w+.1, wr*2, t=wt);
 			translate([0,0,-(l/2+wt/2+wt)])
