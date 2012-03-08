@@ -18,3 +18,60 @@ battery power for a few hours minimum of teleconference plus 15 minutes of
 movement
 
 
+
+
+Major components:
+Chassis
+-Heavy enough to push doors open
+-easy to open for maintnance
+-soundproofed
+-low CG, but tall enough for a comfortable converation
+-low chance of collision/spin injury to other people -- round, no protrusions, covered wheels 
+
+Batteries
+-low fire hazard (no lipo?)
+
+Motor / drivetrain with encoders
+-3-4mph top speed
+-power to open doors
+-quiet
+
+Mecanum wheels / suspension
+-some suspension so you don't get lift-off of Mecanum wheel going over bumps/thresholds
+
+motor servoing controllers
+
+Core cpu (sheevaplug/dockstar/raspberry pi)
+-enough capacity to process cameras, mics for transmition
+-ideally enough CPU to process mics for source separation on-board
+-ideally enough CPU to have some visual self-driving ability to help overcome control lag
+
+wifi links
+-multiple links for smooth hand-off
+
+microphone array (6ish MEMS mics -> PIC32 -> usb)
+
+omnidirectional camera
+
+front camera
+
+speakers
+
+display
+-7ish inches.  (Nook color since I have one?)
+
+chassis sensors
+-internal mic
+-accelerometer (vibration and jarring)
+-temperature
+
+charger/dock
+-self docking
+-low voltage
+-smart connection monitoring (current imbalance or high voltage drop across connector)
+
+local controller
+-wiimote nunchuck?
+
+remote controller
+-web, hardware, or software?  all three?
