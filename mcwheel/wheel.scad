@@ -14,7 +14,7 @@ overall_contact_r=100;
 rotor_r=28;
 
 //some rotor definition number
-rotor_l =140; //full length of a roller
+rotor_l =145; //full length of a roller
 rotor_mid_l=35; //length of the middle segment of a roller
 floorclearance_t=8; //distance from the floor to a bearing bracket -- smaller means thicker/sturdier brackets but less clearance
 rotorclearance_t=1.5; //distance between rollers and brackets. -- smaller means thicker/sturdier brackets but less clearance
@@ -28,7 +28,7 @@ brac_w = outer_r*2+5;
 brac_t = 8;
 
 //hub fill in radius and thickness
-hub_r=55;
+hub_r=60;
 hub_t=pow(pow(brac_w,2)+pow(brac_t*2+rotor_mid_l+2*rotorclearance_t, 2), .5);
 
 //bearing catch flange demensions
