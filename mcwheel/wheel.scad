@@ -5,30 +5,30 @@
 rollers=6;
 
 //These are the bearings that support the rollers
-bearing_od=16;
-bearing_id=5;
-bearing_t=5;
+bearing_od=9;
+bearing_id=4;
+bearing_t=4;
 
 //effective radius and roller radius
-overall_contact_r=100;
-rotor_r=28;
+overall_contact_r=50;
+rotor_r=14;
 
 //some rotor definition number
-rotor_l =145; //full length of a roller
-rotor_mid_l=35; //length of the middle segment of a roller
-floorclearance_t=8; //distance from the floor to a bearing bracket -- smaller means thicker/sturdier brackets but less clearance
-rotorclearance_t=1.5; //distance between rollers and brackets. -- smaller means thicker/sturdier brackets but less clearance
+rotor_l =70; //full length of a roller
+rotor_mid_l=16; //length of the middle segment of a roller
+floorclearance_t=7; //distance from the floor to a bearing bracket -- smaller means thicker/sturdier brackets but less clearance
+rotorclearance_t=1; //distance between rollers and brackets. -- smaller means thicker/sturdier brackets but less clearance
 
 //roller angles
 rotor_angle=45;
 
 //bracket thickness and width
 outer_r=rotor_r-floorclearance_t;
-brac_w = outer_r*2+5;
-brac_t = 8;
+brac_w = outer_r*2+2;
+brac_t =5.5;
 
 //hub fill in radius and thickness
-hub_r=60;
+hub_r=28;
 hub_t=pow(pow(brac_w,2)+pow(brac_t*2+rotor_mid_l+2*rotorclearance_t, 2), .5);
 
 //bearing catch flange demensions
@@ -36,8 +36,8 @@ lip_h = 1.5;
 lip_w = brac_t - bearing_t;
 
 //holes in end of rotors for bolts
-countersink_r=9;
-countersink_d=10;
+countersink_r=10/2;
+countersink_d=7;
 
 //planned rubber tread features
 rubber_t=2;
