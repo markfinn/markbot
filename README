@@ -6,9 +6,15 @@ remote rebot.
 This is for a telecommuter to have a physical presence at a remote office.
 
 Should include:
-mobile platform
+quiet mobile platform
 navigation omni-camera
 2-way video conferencing with multiple microphones
+multiple wifi connections for overlapping hand off, possibly backup low-rate
+link
+a way to drive locally for dealing with a failure
 ability to dock/undock for charging without local help
+ability to open (heavy) doors
+battery power for a few hours minimum of teleconference plus 15 minutes of
+movement
 
 
