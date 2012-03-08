@@ -164,10 +164,10 @@ module rollerprofile(overradius=0, grooves=0, groove_d=0, step=40)
 	{
 
 		polygon(points = [ 
-			[0, rp_l(lp)           ],  
-			[rp_r(lp)          + rp_rad_adj(overradius, groove_d, chunksize, rp_l(lp         ), w), rp_l(lp)],
+			[0, rp_l(lp + l/2/step)],
 			[rp_r(lp+l/2/step) + rp_rad_adj(overradius, groove_d, chunksize, rp_l(lp+l/2/step), w), rp_l(lp+l/2/step)],  
-			[0, rp_l(lp + l/2/step)]
+			[rp_r(lp)          + rp_rad_adj(overradius, groove_d, chunksize, rp_l(lp         ), w), rp_l(lp)],
+			[0, rp_l(lp)           ]  
 			]);
 	}
 
