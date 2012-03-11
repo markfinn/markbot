@@ -31,6 +31,8 @@ Chassis
 -soundproofed
 -low CG, but tall enough for a comfortable converation
 -low chance of collision/spin injury to other people -- round, no protrusions, covered wheels 
+-casters for moving when broken
+-tower should be able to have ne things added on easily, and sturdy enough to operate an arm (for door knobs)
 
 Batteries
 -low fire hazard (no lipo?)
@@ -58,11 +60,13 @@ microphone array (6ish MEMS mics -> PIC32 -> usb)
 omnidirectional camera
 
 front camera
+-movable -- direction, and height (for interacting with sitting people). maybe should be able to move in to / over a table (for sitting at a meeting)
 
 speakers
 
 display
 -7ish inches.  (Nook color since I have one?)
+-movable -- direction, and height (for interacting with sitting people). maybe should be able to move in to / over a table (for sitting at a meeting)
 
 chassis sensors
 -internal mic
@@ -74,8 +78,9 @@ charger/dock
 -low voltage
 -smart connection monitoring (current imbalance or high voltage drop across connector)
 
-local controller
--wiimote nunchuck?
+local control
+-emergency power off
 
 remote controller
 -web, hardware, or software?  all three?
+

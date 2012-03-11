@@ -25,96 +25,119 @@ cylinder(r=sh_d/2, h=sh_l+mb_l/2);
 }
 }
 
-module battery()
-{
-d=23.1;
-l=43.2;
+module pack(){
+	d=23.1;
+	l=43.2;
 
-translate([0,0,0])
-cylinder(r=d/2, h=l);
-}
-
-module pack(plate_r){
-
-		for (x = [-3 : 3])
-		translate([23.3*x, plate_r-25,0])
-		battery();
+	for (x = [-3 : 3])
+	translate([(d+.2)*x, -d/2,0])
+	cylinder(r=d/2, h=l);
 }
 
 module markbot()
 {
-	basea=170;
+	basea=10*25.4;
 	baseb=basea-25;
-	plate_r=12*25.4;
-	cover_h=100;
-	cover_t=6;
-	plate_t=10;
+	cover_h=70;
+	cover_t=3;
+	plate_t=6;
 	plate_lip=4;
 	ground_clear=30;
 	wheel_r=50;
+	wcutclear=20;
 	wcutl=110;
 	wcutw=70;
-	tower_w=150;
+	tower_w=100;
 	tower_bar_t=15;
 	tower_h=5*12*25.4;
+	caster_width=250;
 
 	wheel_offset = wheel_r - (ground_clear + plate_t);
 
 	translate([0,0,wheel_offset])
 	union(){
 		//wheels
-//		translate([ basea, baseb,0]) rotate(a=90, v=[0,1,0]) wheel();
-//		translate([-basea, baseb,0]) rotate(a=90, v=[0,1,0]) mirror() wheel();
-//		translate([-basea,-baseb,0]) rotate(a=90, v=[0,1,0]) wheel();
-//		translate([ basea,-baseb,0]) rotate(a=90, v=[0,1,0]) mirror() wheel();
+		translate([ (basea-wcutw/2-wcutclear), (baseb-wcutl/2-wcutclear),0])  rotate(a=90, v=[0,1,0]) wheel();
+		translate([-(basea-wcutw/2-wcutclear), (baseb-wcutl/2-wcutclear),0]) rotate(a=90, v=[0,1,0]) mirror() wheel();
+		translate([-(basea-wcutw/2-wcutclear),-(baseb-wcutl/2-wcutclear),0])  rotate(a=90, v=[0,1,0]) wheel();
+		translate([ (basea-wcutw/2-wcutclear),-(baseb-wcutl/2-wcutclear),0]) rotate(a=90, v=[0,1,0]) mirror() wheel();
 
 		//motors
 		color("green", .80)
-		rotate(a=0, v=[0,0,1])	translate([basea+25,40, 35.8/2]) rotate(a=90, v=[0,1,0]) motor();
+		translate([basea-wcutclear,80, 35.8/2]) rotate(a=90, v=[0,1,0]) motor();
 		color("green", .80)
-		rotate(a=0, v=[0,0,1])	translate([basea+25,-40, 35.8/2]) rotate(a=90, v=[0,1,0]) motor();
+		translate([basea-wcutclear,-80, 35.8/2]) rotate(a=90, v=[0,1,0]) motor();
 		color("green", .80)
-		rotate(a=0, v=[0,0,1])	translate([-basea-25,40, 35.8/2]) rotate(a=-90, v=[0,1,0]) motor();
+		translate([-basea+wcutclear,80, 35.8/2]) rotate(a=-90, v=[0,1,0]) motor();
 		color("green", .80)
-		rotate(a=0, v=[0,0,1])	translate([-basea-25,-40, 35.8/2]) rotate(a=-90, v=[0,1,0]) motor();
+		translate([-basea+wcutclear,-80, 35.8/2]) rotate(a=-90, v=[0,1,0]) motor();
 
 		//batteries
 		color("red", .80)
-		for (x = [0 : 90: 270])
-		for (y = [-18 : 36: 18])
-		rotate(a=x+y, v=[0,0,1])
-		pack(plate_r);
+		for (a = [ 0 : 180: 180])
+		for (y = [-90 : 180: 90])
+		rotate(a=a, v=[0,0,1])
+		translate([-(basea-wcutw-2*wcutclear),y,0])
+		rotate(a=90, v=[0,0,1])
+		pack();
 
 		//plate
 		color("gray", .80)
-		translate([0,0,-plate_t])
+		translate([0,0,-plate_t/2])
 		difference(){
-			cylinder(r=plate_r, h=plate_t);
+			cube([basea*2, baseb*2,plate_t], center=true);
+
+			//lip
 			translate([0,0,plate_t-plate_lip])
 			difference(){
-				cylinder(r=plate_r, h=plate_lip);
-				cylinder(r=plate_r-cover_t, h=plate_lip);
+				cube([basea*2, baseb*2,plate_lip], center=true);
+				cube([basea*2-cover_t, baseb*2-cover_t,plate_lip], center=true);
 			}
 
-			translate([ basea, baseb,0]) cube([wcutw,wcutl,plate_t*3], center=true);
-			translate([-basea, baseb,0]) cube([wcutw,wcutl,plate_t*3], center=true);
-			translate([-basea,-baseb,0]) cube([wcutw,wcutl,plate_t*3], center=true);
-			translate([ basea,-baseb,0]) cube([wcutw,wcutl,plate_t*3], center=true);
+			//wheel cutouts
+			translate([ (basea-wcutw/2-wcutclear), (baseb-wcutl/2-wcutclear),0]) cube([wcutw,wcutl,plate_t*3], center=true);
+			translate([-(basea-wcutw/2-wcutclear), (baseb-wcutl/2-wcutclear),0]) cube([wcutw,wcutl,plate_t*3], center=true);
+			translate([ (basea-wcutw/2-wcutclear),-(baseb-wcutl/2-wcutclear),0]) cube([wcutw,wcutl,plate_t*3], center=true);
+			translate([-(basea-wcutw/2-wcutclear),-(baseb-wcutl/2-wcutclear),0]) cube([wcutw,wcutl,plate_t*3], center=true);
+
+			//casters
+			translate([caster_width/2,-baseb,0])
+			cube([30, 60, plate_t*2], center=true);
+			translate([-caster_width/2,-baseb,0])
+			cube([30, 60, plate_t*2], center=true);
 
 		}
 
+		//casters
+		color("darkgray", .8)
+		translate([caster_width/2,-baseb,-plate_t/2])
+		rotate(a=90,v=[0,1,0])
+		cylinder(r=25, h=25, center=true);
+		color("darkgray", .8)
+		translate([-caster_width/2,-baseb,-plate_t/2])
+		rotate(a=90,v=[0,1,0])
+		cylinder(r=25, h=25, center=true);
+
 		//cover
 		color("purple", .20)
-		translate([0,0,-plate_t])
+		translate([0,0,cover_h/2-plate_lip])
 		difference(){
-			cylinder(r=plate_r, h=cover_h);
+			cube([basea*2, baseb*2,cover_h], center=true);
 			translate([0,0,-cover_t])
-			cylinder(r=plate_r-cover_t, h=cover_h);
+			cube([basea*2-cover_t, baseb*2-cover_t,cover_h], center=true);
 
-			translate([ basea, baseb,0]) cube([wcutw,wcutl,plate_t*3], center=true);
-			translate([-basea, baseb,0]) cube([wcutw,wcutl,plate_t*3], center=true);
-			translate([-basea,-baseb,0]) cube([wcutw,wcutl,plate_t*3], center=true);
-			translate([ basea,-baseb,0]) cube([wcutw,wcutl,plate_t*3], center=true);
+			rotate(a=0, v=[0,0,1])
+			translate([ tower_w/2-tower_bar_t,tower_w/2-tower_bar_t,0])
+			cube([tower_bar_t,tower_bar_t,tower_h]);
+			rotate(a=90, v=[0,0,1])
+			translate([ tower_w/2-tower_bar_t,tower_w/2-tower_bar_t,0])
+			cube([tower_bar_t,tower_bar_t,tower_h]);
+			rotate(a=180, v=[0,0,1])
+			translate([ tower_w/2-tower_bar_t,tower_w/2-tower_bar_t,0])
+			cube([tower_bar_t,tower_bar_t,tower_h]);
+			rotate(a=270, v=[0,0,1])
+			translate([ tower_w/2-tower_bar_t,tower_w/2-tower_bar_t,0])
+			cube([tower_bar_t,tower_bar_t,tower_h]);
 
 		}
 
@@ -137,6 +160,21 @@ module markbot()
 
 		}
 
+
+		//screen
+		color("teal", .9)
+		translate([0,tower_w/2+40,tower_h-150])
+		rotate(a=-70, v=[1,0,0])
+		cube([140,240,10], center=true);
+
+		//camera
+		color("pink", .9)
+		translate([0,tower_w/2+10,tower_h])
+		rotate(a=-70, v=[1,0,0])
+		union(){
+			sphere(r=20);
+			cylinder(r=10, h=25);
+		}
 
 	}
 
