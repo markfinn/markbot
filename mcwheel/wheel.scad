@@ -354,7 +354,7 @@ module print()
 }
 
 //print();
-display();
+//display();
 //display4();
 
 //rotate(a=$t*360/4, v=[0,0,1]) display();
