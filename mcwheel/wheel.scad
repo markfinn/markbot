@@ -285,7 +285,9 @@ module wheel(wheels=1, hardware=1, c="CornflowerBlue")
 							translate([axle_r,0,0]) 
 								difference()
 								{
-									cylinder(r=rotor_r+rotorclearance_t, h=rotor_l, center=true);
+/*slow*///									roller(overradius=rotorclearance_t);
+/*cruddy replacement*/							cylinder(r=rotor_r+rotorclearance_t, h=rotor_l, center=true);
+
 									translate([0, 0, rotor_mid_l/2+rotorclearance_t+brac_t/2])
 										cube([rotor_r*2, rotor_r*2,brac_t], center=true);
 									translate([0, 0, -rotor_mid_l/2-rotorclearance_t-brac_t/2])
