@@ -392,6 +392,9 @@ h=(strut_l/2+4+glass_side)/2;
 		translate([-glass_side-2-h,-cap_r-ball_d/2-2,0])
 		rotate([45,0,45])
 		xmasball(topper=1);
+
+		translate([glass_side+2+h,-cap_r-ball_d/2-2,0])
+		camera();
 	}
 
 	translate([-cap_r-2, 0, 0])
@@ -422,9 +425,9 @@ module print2d(){
 
 
 //print(reprap_only=0);
-print(reprap_only=1);
+//print(reprap_only=1);
 //print2d();
-//display();
+display();
  
 
 
