@@ -7,6 +7,7 @@ This is for a telecommuter to have a physical presence at a remote office.
 
 Status:
 Wheel started.  http://www.thingiverse.com/thing:18784
+omnicamera started.  http://www.thingiverse.com/thing:20277
 
 
 Should include:
@@ -36,6 +37,7 @@ Chassis
 
 Batteries
 -low fire hazard (no lipo?)
+-probably sealed lead acid.  cheap, and the weight will help keep the center of gravity low
 
 Motor / drivetrain with encoders
 -3-4mph top speed
@@ -58,6 +60,7 @@ wifi links
 microphone array (6ish MEMS mics -> PIC32 -> usb)
 
 omnidirectional camera
+-christmas ornament as the mirror for now.
 
 front camera
 -movable -- direction, and height (for interacting with sitting people). maybe should be able to move in to / over a table (for sitting at a meeting)
