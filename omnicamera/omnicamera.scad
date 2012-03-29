@@ -1,17 +1,15 @@
-$fn=50;
-//omnidirectional camera.
+//omnidirectional camera. Mark Finn, 2012
 //mine is based on a silver christmas ball ornament, 4 pieces of steel/aluminum bar or sheet, 2 reprapped parts, a small piece of glass, and a disassembled logitech HD webcam C510 camera.
 // mine nounts on top of a 2" PVC pipe.
 // uncomment the right module at the bottom to display the completed assembly vs showing the printable parts.
 
-//should it be in it's own directory?
-//thingiverse
-//thingiverse link in git readme
-//git
-
 
 //most of the case adds clearances for you, so for instance you should enter the size of your camera, and I will make the hole for it slightly bigger automatically.
 //this does not apply to drill holes.  you specify the actual diameter/depth you want
+
+$fn=50;
+
+
 
 //christmas ball parameters. measure yours.
 ball_d=1.758*25.4;
