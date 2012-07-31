@@ -7,6 +7,9 @@
 //most of the case adds clearances for you, so for instance you should enter the size of your camera, and I will make the hole for it slightly bigger automatically.
 //this does not apply to drill holes.  you specify the actual diameter/depth you want
 
+//I used thin struts rather than an clear tube to hold up the reflector because I was having glare issues with glass tubes. glass that isn't meant to be optical doesn't have anti-reflective coatings. The trade-off with the struts is that things will get dirty, and the view is slightly occluded.
+
+
 $fn=50;
 
 
@@ -45,8 +48,12 @@ drill_clear_r = .072*25.4;
 
 
 //these are the main sizes of the device.  
-//dist is the distance from the lens to the ball reflector.  choose yours so that the camera just barely clips oss the edges of the ball, since the very edges don't give usefull information anyway.
-dist=2.5*25.4;
+//dist is the distance from the lens to the ball reflector.  choose yours so that the camera just barely sees the whole ball, or slightly clips off the edges of the ball, since the very edges don't give usefull information anyway.
+//I measured mine with a test setup, but you can calculate this indirectly from the camera viewing angle and the ball size.
+view_angle=37;
+dist=ball_d/2/tan(view_angle/2)-ball_d/2;
+//dist=44;
+
 //the radius of the inside of the strut positions
 strut_r = ball_d/2+3;
 //where to place the struts.  I chose 4 regularly placed ones offset by 45 degrees becasue that gives me a clear forward/back view, my struts are thin so I don't mind having 4 of them (vs 3), and they don't run through the camera board in this configuration.
@@ -71,12 +78,13 @@ cap_recede_angle=15;
 glass_side = 25.4;
 glass_t = .112*25.4;
 glass_inset = 2;
+skin=.6; //how much plastic should support the lens hole.  this is an artifact of 3d printing, and needs to be drilled out. I went for 3x my layer height.
 
 //cover is the piece that seals the camera into the case
 //how thick is the cover
 cover_t=3;
 //how far does the cover overlap on the sides
-cover_overlap = 16;
+cover_overlap = 8;
 //how big are the screw holes in the cover
 cover_hole_d=.115*25.4;
 //how big and deep are the screw holes for the cover, in the case
@@ -85,7 +93,7 @@ cover_case_hole_depth=.4*25.4;
 
 //pvc pipe dimmensions for the mounting sleeve, and for the display rendering
 pvcpipe_od = 2.375*25.4; //2" nominal sch 40/80pvc pipe
-pvcpipe_h=50;
+pvcpipe_h=25;
 //diameter of the holes where I plan to screw through into the pvc pipe.  I'm going to use drywall screws, but a better long-term idea might be to add nut traps and glue in nuts, then use thumbscrewes.  
 post_drill_d=.115*25.4;
 
@@ -230,8 +238,8 @@ recede = tan(cap_recede_angle)*(cap_r-(ball_d/2+cap_lip));  //how much does the 
 		//cutout for the strut holes
 		for (a = strut_angles){
 			rotate([0,0,a])
-			translate([strut_r-1,-strut_t/2-1,0])
-			cube([strut_w+2,strut_t+2,cap_strut_d]);
+			translate([strut_r-1,-strut_t/2-.5,0])
+			cube([strut_w+2,strut_t+1,cap_strut_d]);
 		}
 	}
 }
@@ -250,15 +258,16 @@ module case(){
 				//strut holes
 				for (a = strut_angles){
 					rotate([0,0,a])
-					translate([strut_r-1,-strut_t/2-1,4+pvcpipe_h])
-					cube([strut_w+2,strut_t+2,case_depth_over+case_depth_under-2]);
+					translate([strut_r-1,-strut_t/2-.5,4+pvcpipe_h])
+					cube([strut_w+2,strut_t+1,case_depth_over+case_depth_under-2]);
 				}
 
 				//camera body hole
 				camera_vault_shape(clearance=1, h=(case_depth_under+cam_top_clear+pvcpipe_h)*2);
 
 				//camera lens hole
-				cylinder(r=lens_d/2+1, h=500);
+				translate([0,0,case_depth_over+case_depth_under+pvcpipe_h-glass_inset-case_depth_over-skin])
+				cylinder(r=lens_d/2+1, h=case_depth_over);
 
 				//camera cord tunnel
 				translate([0,0,pvcpipe_h])
@@ -270,7 +279,7 @@ module case(){
 						cylinder(r=(cam_cord_d+1.3)/2, h=cap_r*2, center=true);
 					}
 					translate([-(cam_cord_d+1.3)/2,-(cam_cord_d+1.3),0])
-					cube([cam_cord_d+1.3,(cam_cord_d+1.3)*2,(cover_overlap+cam_cord_d+1.3+.5)]);
+					cube([cam_cord_d+1.3,(cam_cord_d+1.3)*2,(cam_w/2+cover_overlap+1+cam_cord_d+1.3)]);
 				}
 
 				//glass inset
@@ -298,7 +307,7 @@ module case(){
 		//cover screw holes
 		for (m=[[0,0,0], [1,0,0], [0,1,0], [1,1,0]]){
 			mirror(m)
-			translate([cam_l/4,(cam_w+cover_overlap/2)/2,case_depth_under+pvcpipe_h-1])
+			translate([cam_l/4,cam_w/2+1+cover_overlap/2,case_depth_under+pvcpipe_h-1])
 			cylinder(r=cover_case_hole_d/2, h=cover_case_hole_depth*2, center=true);
 		}
 
@@ -332,13 +341,26 @@ module cover(){
 			//cover screw holes
 			for (m=[[0,0,0], [1,0,0], [0,1,0], [1,1,0]]){
 				mirror(m)
-				translate([cam_l/4,(cam_w+cover_overlap/2)/2,])
+				translate([cam_l/4,cam_w/2+1+cover_overlap/2,])
 				cylinder(r=cover_hole_d/2, h=cover_t*3, center=true);
 			}
 		}
 
 		//clip it down on the sides
-		cube([cap_r*2,cam_w+cover_overlap,20], center=true);
+		cube([cap_r*2,cam_w+2+cover_overlap*2,20], center=true);
+	}
+}
+
+module captop(){
+top_slope=2;
+sr=cap_r*sqrt(1+top_slope*top_slope);
+h=sr-cap_r*top_slope;
+
+	color("yellow", .8)
+	intersection(){
+		translate([0,0,h-sr+3])
+		sphere(r=sr);
+		cylinder(r=cap_r, h=h+3);
 	}
 }
 
@@ -357,6 +379,8 @@ module display(){
 	}
 
 	cap();
+	translate([0,0,cap_h])
+	captop();
 
 	translate([0,0,-base])
 	case();
@@ -395,18 +419,21 @@ h=(strut_l/2+4+glass_side)/2;
 		camera();
 	}
 
-	translate([-cap_r-2, 0, 0])
+	translate([-cap_r-2-cap_r-2, 0, 0])
 	rotate([180,0,0])
 	translate([0, 0, -cap_h])
 	cap();
 
-	translate([cap_r+2, 0, 0])
 	rotate([180,0,0])
 	translate([0, 0, -case_depth_over])
 	case();
 
 	translate([0, -sqrt(pow(cap_r+4+pvcpipe_od/2, 2)-pow(cap_r+2,2)), 0])
 	cover();
+
+	translate([2*cap_r+4, 0, 0])
+	captop();
+
 
 }
 
@@ -422,10 +449,10 @@ module print2d(){
 }
 
 
-//print(reprap_only=0);
+print(reprap_only=0);
 //print(reprap_only=1);
 //print2d();
-display();
+//display();
  
 
 
