@@ -7,6 +7,7 @@ This is for a telecommuter to have a physical presence at a remote office.
 
 ## Status:
 Wheel started.  http://www.thingiverse.com/thing:18784
+omnicamera started.  http://www.thingiverse.com/thing:20277
 Rough robot plan started, researching motors, gearing
 
 ## Should include:

@@ -50,7 +50,9 @@ transparency=.85;
 //calculate the radius of the rotor axles
 axle_r=overall_contact_r-rotor_r;
 
-
+//render the roller cutout as cylinders. this makes them inaccurate, which is bad if you're doing something tricky on the inner hub design,
+//but it's 100 times faster when viewing your results
+doslowcutout=0;
 
 
 module bracket()
@@ -173,7 +175,7 @@ module rollerprofile(overradius=0, grooves=0, groove_d=0, step=50)
 
 }
 
-module roller(c="DimGray", overradius=0, grooves=0, groove_d=0)
+module roller(c="DimGray", overradius=0, grooves=0, groove_d=0, rollersteps=50)
 {
 color(c, transparency)
 	difference()
@@ -184,9 +186,9 @@ color(c, transparency)
 			{
 				union()
 				{
-					rotate_extrude(convexity=grooves+3, $fn=40) rollerprofile(overradius=overradius, grooves=grooves, groove_d=groove_d);
+					rotate_extrude(convexity=grooves+3, $fn=40) rollerprofile(overradius=overradius, grooves=grooves, groove_d=groove_d, steps=rollersteps);
 					rotate(a=180, v=[0,1,0])
-						rotate_extrude(convexity=grooves+3, $fn=40) rollerprofile(overradius=overradius, grooves=grooves, groove_d=groove_d);
+						rotate_extrude(convexity=grooves+3, $fn=40) rollerprofile(overradius=overradius, grooves=grooves, groove_d=groove_d, steps=rollersteps);
 				}
 				cylinder(r=rotor_r+1+overradius, rotor_l, center=true);
 			}
@@ -285,7 +287,11 @@ module wheel(wheels=1, hardware=1, c="CornflowerBlue")
 							translate([axle_r,0,0]) 
 								difference()
 								{
-									cylinder(r=rotor_r+rotorclearance_t, h=rotor_l, center=true);
+									if (doslowcutout)
+										roller(overradius=rotorclearance_t, rollersteps=10);
+									else
+										cylinder(r=rotor_r+rotorclearance_t, h=rotor_l, center=true);
+
 									translate([0, 0, rotor_mid_l/2+rotorclearance_t+brac_t/2])
 										cube([rotor_r*2, rotor_r*2,brac_t], center=true);
 									translate([0, 0, -rotor_mid_l/2-rotorclearance_t-brac_t/2])
