@@ -34,6 +34,12 @@ module pack(){
 	cylinder(r=d/2, h=l);
 }
 
+module sla6v(){
+//Power Sonic6.0V SLA 6100
+//6v 12ah 71oz  $16.95 http://www.cheapbatterypacks.com/product/660/1171/Power-Sonic60V-SLA-6100.aspx
+	cube([94,151.1,55.9]);
+}
+
 module markbot()
 {
 	basea=10*25.4;
@@ -57,11 +63,11 @@ module markbot()
 	translate([0,0,wheel_offset])
 	union(){
 		//wheels
-		translate([ (basea-wcutw/2-wcutclear), (baseb-wcutl/2-wcutclear),0])  rotate(a=90, v=[0,1,0]) wheel();
+/*		translate([ (basea-wcutw/2-wcutclear), (baseb-wcutl/2-wcutclear),0])  rotate(a=90, v=[0,1,0]) wheel();
 		translate([-(basea-wcutw/2-wcutclear), (baseb-wcutl/2-wcutclear),0]) rotate(a=90, v=[0,1,0]) mirror() wheel();
 		translate([-(basea-wcutw/2-wcutclear),-(baseb-wcutl/2-wcutclear),0])  rotate(a=90, v=[0,1,0]) wheel();
 		translate([ (basea-wcutw/2-wcutclear),-(baseb-wcutl/2-wcutclear),0]) rotate(a=90, v=[0,1,0]) mirror() wheel();
-
+*/
 		//motors
 		color("green", .80)
 		translate([basea-wcutclear,80, 35.8/2]) rotate(a=90, v=[0,1,0]) motor();
@@ -74,14 +80,21 @@ module markbot()
 
 		//batteries
 		color("red", .80)
-		for (a = [ 0 : 180: 180])
+/*		for (a = [ 0 : 180: 180])
 		for (y = [-90 : 180: 90])
 		rotate(a=a, v=[0,0,1])
 		translate([-(basea-wcutw-2*wcutclear),y,0])
 		rotate(a=90, v=[0,0,1])
 		pack();
+*/
+		for (a = [ 0 : 180: 180])
+		for (y = [-90 : 180: 90])
+		rotate(a=a, v=[0,0,1])
+		translate([-(basea-wcutw-2*wcutclear),y,0])
+		//rotate(a=90, v=[0,0,1])
+		sla6v();
 
-		//plate
+//plate
 		color("gray", .80)
 		translate([0,0,-plate_t/2])
 		difference(){

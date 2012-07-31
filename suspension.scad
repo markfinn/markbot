@@ -60,10 +60,11 @@ susp_h1=10;
 susp_l=80;
 
 
-robot_ground_clearannce = 38+12;
+robot_ground_clearannce_max = 38+12;
+robot_ground_clearannce_min = 38-12;
 plate_t = 5;
 
-
+robot_ground_clearannce = robot_ground_clearannce_max;
 
 /****************/
 
@@ -75,7 +76,7 @@ plate_t = 5;
 
 
 translate([-200, -(overall_contact_r - robot_ground_clearannce), -200])
-color("gray", .5)
+color("yellow", 0.1)
 cube([400,plate_t,400]);
 
 
@@ -128,12 +129,12 @@ gear(number_of_teeth=teeth1, bore_diameter=2, hub_diameter=9, hub_thickness=inne
 
 
 /*****
-pulley
+big pulley
 *****/
 
 
-translate([0, 0,hub_t/2+20])
-rotate(a=gear_off_angle,v=[0,0,1])
+translate([0, 0,hub_t/2+susp_th+bigpulley_th])
+rotate([180,0,gear_off_angle])
 translate([(teeth2-teeth1) * pitch /2, 0,0])
 import_stl("includedthings/pulley_gt2_3mm_65tooth.stl", convexity = 5);
 
@@ -145,7 +146,7 @@ import_stl("includedthings/pulley_gt2_3mm_65tooth.stl", convexity = 5);
 echo("modified involute gear clearance in mcad.");
 union(){
 	difference(){
-		color("gray", .4) cylinder(r=50,h=hub_t, center=true);
+		color("gray", .4) cylinder(r=overall_contact_r,h=hub_t, center=true);
 //		wheel(wheels=0,hardware=0);
 		translate([0,0,hub_t/2-(innergear_w+gear_side_clear*2)-hubrim_t])
 		rotate(a=gear_off_angle,v=[0,0,1])
@@ -163,7 +164,14 @@ union(){
 	}
 }
 /****************/
+//Scanner RC PowerSquare 3100kv Racing Motor (13.5T) -- sensored, hobbyking $19.50
+motor_l=51;
+motor_d=36;
+motor_shaft_l=16;
+motor_shaft_d=3.14;
 
+
+/****************/
 teeth1=13;
 teeth2=67;
 pitch = .9;
@@ -176,17 +184,29 @@ hubrim_h=0;
 gear_side_clear=1;
 hub_ext_dia=28;
 gear_off_angle=90;
+susph=15;
+suspl1=15;
+suspl2=15;
+bigpulley_th=20;
+
+/***************
+motor
+**************/
+translate([100,motor_d/2,hub_t/2+susp_th-motor_l])
+union(){
+	cylinder(r=motor_d/2, h=motor_l);
+	cylinder(r=motor_shaft_d/2, h=motor_l+motor_shaft_l);
+	translate([0,0,motor_l+3])
+	import_stl("includedthings/pulley_gt2_3mm_14tooth.stl", convexity = 5);
+}
 
 translate([0,0,hub_t/2])
 difference(){
 	union(){
-#		hull(){
-			translate([0,0,0])
-			cylinder(r=5, h=susp_th);
-			translate([0,0,0])
-			cylinder(r=5, h=susp_th);
-			}
-		cube([susp_l,susp_h1,susp_th]);
+		translate([-suspl1,-(overall_contact_r - (robot_ground_clearannce_max+plate_t)),0])
+		cube([suspl1+suspl2,susph+overall_contact_r-(robot_ground_clearannce_max+plate_t),susp_th]);
+		rotate([0,0,atan2((robot_ground_clearannce_max-robot_ground_clearannce_min)/2, susp_l)])
+#		cube([susp_l,susp_h1,susp_th]);
 
 		translate([0,0,-hubrim_t])
 		cylinder(r=teeth2*pitch/2-2*teeth1*pitch/2+hubrim_h,h=hubrim_t+1);
@@ -197,6 +217,11 @@ difference(){
 	translate([susp_th*2/3+hub_axle_r,susp_h1,susp_th/2])
 	cylinder(r=gear1_axle_r, h=susp_th*2, center=true);
 }
+
+
+
+
+
 
 /****************/
 
